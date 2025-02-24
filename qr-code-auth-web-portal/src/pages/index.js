@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import QRCode from "react-qr-code";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
+  const [qrCodeData, setQrCodeData] = useState("testData")
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -90,8 +92,14 @@ export default function Login() {
               <h2 className="text-2xl font-bold mb-4 text-black">
                 Scan QR Code
               </h2>
-              <div className="bg-gray-200 w-32 h-32 mb-4 flex items-center justify-center">
-                QR CODE
+
+              <div className="h-auto m-auto w-full max-w-[180px]">
+                <QRCode
+                  size={256}
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  value={qrCodeData}
+                  viewBox={`0 0 256 256`}
+                />
               </div>
               <button
                 onClick={handleFlip}
