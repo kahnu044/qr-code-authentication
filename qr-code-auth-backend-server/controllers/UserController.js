@@ -199,3 +199,25 @@ exports.validateQrCodeLogin = async (req, res) => {
       .json({ success: false, error: "Internal server error." });
   }
 };
+
+exports.qrCodeLogout = async (req, res) => {
+  const { qrCodeId } = req.body;
+  if (!qrCodeId) {
+    return res
+      .status(400)
+      .json({ success: false, error: "qrCodeId are required." });
+  }
+
+  try {
+    const channelName = "private-" + qrCodeId;
+    pusher.trigger(channelName, "qr-code-logout", {
+      message: "Logging out via App",
+    });
+    res.json({ success: true, message: "Logging out via App" });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Internal server error." });
+  }
+};

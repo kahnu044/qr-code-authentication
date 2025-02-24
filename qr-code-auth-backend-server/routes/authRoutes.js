@@ -20,4 +20,6 @@ router.post(
   userController.validateQrCodeLogin
 );
 
+router.post("/qr-code-logout", isAuthorize, userController.qrCodeLogout);
+
 module.exports = router;
