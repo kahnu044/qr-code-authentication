@@ -1,7 +1,17 @@
-// controllers/userController.js
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+
+const generateQRUniqueId = () => {
+  const date = new Date();
+  const token = crypto.randomBytes(64).toString("hex");
+  const channelData = `${date.getDate()}-${date.getMonth()}-${date.getMinutes()}`;
+  return crypto
+    .createHash("md5")
+    .update(`${channelData}||${token}`)
+    .digest("hex");
+};
 
 exports.register = async (req, res) => {
   const { email, password, name } = req.body;
@@ -76,6 +86,19 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error("Login error:", error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+exports.initiateQRCodeLogin = async (req, res) => {
+  try {
+    let QRCodeData = generateQRUniqueId();
+
+    return res.json({
+      message: "QR Code Login initiated",
+      token: QRCodeData,
+    });
+  } catch (error) {
     return res.status(500).json({ error: "Internal server error." });
   }
 };
