@@ -58,6 +58,15 @@ export default function Login() {
       console.log("QR code login event received:", data);
       handleQrCodeLogin(data);
     });
+
+    // Handle logout event
+    channel.bind("qr-code-logout", (eventData) => {
+      toast(eventData.message);
+      setTimeout(() => {
+        localStorage.clear();
+        router.push("/");
+      }, 2500);
+    });
   };
 
   useEffect(() => {
