@@ -1,6 +1,7 @@
 // controllers/userController.js
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   const { email, password, name } = req.body;
@@ -36,9 +37,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(400)
-      .json({ error: "email and password are required." });
+    return res.status(400).json({ error: "email and password are required." });
   }
 
   try {
@@ -54,9 +53,17 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
+    // Generate a JWT
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user?.name },
+      process.env.JWT_PRIVATE_KEY,
+      { expiresIn: "1h" }
+    );
+
     // Respond with user data (excluding password)
     return res.json({
       message: "Login successful",
+      token: token,
       user: {
         id: user._id,
         email: user.email,
