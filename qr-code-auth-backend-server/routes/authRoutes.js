@@ -14,4 +14,10 @@ router.get("/qr-code-token", userController.initiateQRCodeLogin);
 
 router.post("/process-qr-code", isAuthorize, userController.processQrCode);
 
+router.post(
+  "/validate-qr-code",
+  isAuthorize,
+  userController.validateQrCodeLogin
+);
+
 module.exports = router;

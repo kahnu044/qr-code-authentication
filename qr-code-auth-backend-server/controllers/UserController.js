@@ -161,3 +161,40 @@ exports.processQrCode = async (req, res) => {
       .json({ success: false, error: "Internal server error." });
   }
 };
+
+exports.validateQrCodeLogin = async (req, res) => {
+  const { userId } = req.body;
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ success: false, error: "userId are required." });
+  }
+
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(401).json({ success: false, error: "Invalid login." });
+    }
+
+    if (user._id.toString() !== req.user.id) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Unauthorized access" });
+    }
+
+    return res.json({
+      success: true,
+      message: "QR Code validated successful",
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Internal server error." });
+  }
+};
