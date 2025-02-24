@@ -16,15 +16,15 @@ export const register = async (userData) => {
 
 // Login
 export const login = async (email, password) => {
-  axios
-    .post(`${API_BASE_URL}/auth/login`, { email, password })
-    .then(function (response) {
-      console.log("response", response?.data);
-      return response?.data;
-    })
-    .catch(function (error) {
-      return error?.response;
+  try {
+    let res = await axios.post(`${API_BASE_URL}/auth/login`, {
+      email,
+      password,
     });
+    return res.data;
+  } catch (error) {
+    throw error.response;
+  }
 };
 
 // QR code

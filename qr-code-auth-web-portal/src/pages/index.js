@@ -2,19 +2,26 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import QRCode from "react-qr-code";
+import { ToastContainer, toast } from "react-toastify";
+import { login } from "../services/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
-  const [qrCodeData, setQrCodeData] = useState("testData")
+  const [qrCodeData, setQrCodeData] = useState("testData");
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      localStorage.setItem("token", "server token");
-      router.push("/dashboard");
+    try {
+      const data = await login(email, password);
+      console.log("Login:", data);
+      toast.success("Login Successfully");
+    } catch (err) {
+      let errorMsg =
+        err?.data && err.data?.error ? err.data.error : "Failed to login";
+      toast.error(errorMsg);
     }
   };
 
@@ -34,6 +41,7 @@ export default function Login() {
       <Head>
         <title>Login</title>
       </Head>
+      <ToastContainer autoClose={2000} />
       <div className="min-h-screen flex items-center justify-center bg-black-100">
         <div className="perspective-1000">
           <div className={`relative w-[400px] h-[400px]`}>
@@ -45,7 +53,7 @@ export default function Login() {
             >
               <h2 className="text-2xl font-bold mb-4 text-black">Login</h2>
 
-              <form onSubmit={handleSubmit} className="w-full">
+              <form onSubmit={handleLogin} className="w-full">
                 <label className="text-gray-600">Email</label>
                 <input
                   type="email"
