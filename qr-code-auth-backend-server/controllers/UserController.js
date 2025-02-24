@@ -147,6 +147,7 @@ exports.processQrCode = async (req, res) => {
           name: user.name,
         },
         token: token,
+        channelId: qrCodeId,
       },
     });
 

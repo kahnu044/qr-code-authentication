@@ -51,16 +51,22 @@ export default function Login() {
 
     // Subscribe to the private channel
     const channel = pusher.subscribe("private-" + chanelName);
+    console.log("initializePusher with channelId - ", chanelName);
 
     // Bind qr-code-login event
     channel.bind("qr-code-login", (data) => {
       console.log("QR code login event received:", data);
+      handleQrCodeLogin(data);
     });
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      const channelId = localStorage.getItem("channelId");
+      if (channelId) {
+        initializePusher(channelId);
+      }
       router.push("/dashboard");
     }
   }, [router]);
@@ -69,13 +75,12 @@ export default function Login() {
   useEffect(() => {
     let intervalId;
     if (isFlipped) {
-
       // Initial Call
       showQrCode();
 
       intervalId = setInterval(() => {
         showQrCode();
-      }, 10000);
+      }, 400000);
     }
 
     return () => {
@@ -84,6 +89,24 @@ export default function Login() {
       }
     };
   }, [isFlipped]);
+
+  const handleQrCodeLogin = async (eventData) => {
+    const tokenExist = localStorage.getItem("token");
+    if (tokenExist) {
+      return;
+    }
+
+    toast.success(eventData.message);
+
+    let token = eventData && eventData?.data.token;
+    localStorage.setItem("token", token);
+    localStorage.setItem("channelId", eventData?.data.channelId);
+    localStorage.setItem("authUser", JSON.stringify(eventData?.data.user));
+
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2500);
+  };
 
   return (
     <>
