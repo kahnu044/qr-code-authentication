@@ -4,6 +4,7 @@ import Head from "next/head";
 import QRCode from "react-qr-code";
 import { ToastContainer, toast } from "react-toastify";
 import { login, getQRCodeToken } from "../services/api";
+import Pusher from "pusher-js";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,6 +31,7 @@ export default function Login() {
       const generateQRCodeToken = await getQRCodeToken();
       if (generateQRCodeToken && generateQRCodeToken?.token) {
         setQrCodeData(generateQRCodeToken?.token);
+        initializePusher(generateQRCodeToken?.token);
       }
     } catch (error) {
       console.log("showQrCode error", error);
@@ -38,6 +40,22 @@ export default function Login() {
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
+  };
+
+  // Initialize Pusher
+  const initializePusher = (chanelName) => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      authEndpoint: `${process.env.NEXT_PUBLIC_API_BASE_URL}/pusher/auth`,
+    });
+
+    // Subscribe to the private channel
+    const channel = pusher.subscribe("private-" + chanelName);
+
+    // Bind qr-code-login event
+    channel.bind("qr-code-login", (data) => {
+      console.log("QR code login event received:", data);
+    });
   };
 
   useEffect(() => {
@@ -133,7 +151,6 @@ export default function Login() {
               </h2>
 
               <div className="h-auto m-auto w-full max-w-[180px]">
-
                 {!qrCodeData ? (
                   <div role="status" className="flex justify-center ">
                     <svg
