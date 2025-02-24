@@ -63,8 +63,8 @@ export default function Login() {
     channel.bind("qr-code-logout", (eventData) => {
       toast(eventData.message);
       setTimeout(() => {
-        localStorage.clear();
         router.push("/");
+        localStorage.clear();
       }, 2500);
     });
   };
