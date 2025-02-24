@@ -53,11 +53,15 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials." });
     }
 
+    let expiresIn = "1m";
+    if (req.body?.platform && req.body?.platform === "app") {
+      expiresIn = "5m";
+    }
     // Generate a JWT
     const token = jwt.sign(
       { id: user._id, email: user.email, name: user?.name },
       process.env.JWT_PRIVATE_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: expiresIn }
     );
 
     // Respond with user data (excluding password)
