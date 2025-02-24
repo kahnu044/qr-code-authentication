@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect }  from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 function dashboard() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/');
+    }
+  }, [router]);
+
   return (
     <>
       <Head>

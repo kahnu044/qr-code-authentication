@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
@@ -11,7 +11,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && password) {
-      localStorage.setItem("email", email);
+      localStorage.setItem("token", "server token");
       router.push("/dashboard");
     }
   };
@@ -19,6 +19,13 @@ export default function Login() {
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   return (
     <>
