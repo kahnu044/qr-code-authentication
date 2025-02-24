@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import QRCode from "react-qr-code";
 import { ToastContainer, toast } from "react-toastify";
-import { login } from "../services/api";
+import { login, getQRCodeToken } from "../services/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
-  const [qrCodeData, setQrCodeData] = useState("testData");
+  const [qrCodeData, setQrCodeData] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e) => {
@@ -25,6 +25,17 @@ export default function Login() {
     }
   };
 
+  const showQrCode = async () => {
+    try {
+      const generateQRCodeToken = await getQRCodeToken();
+      if (generateQRCodeToken && generateQRCodeToken?.token) {
+        setQrCodeData(generateQRCodeToken?.token);
+      }
+    } catch (error) {
+      console.log("showQrCode error", error);
+    }
+  };
+
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
@@ -35,6 +46,23 @@ export default function Login() {
       router.push("/dashboard");
     }
   }, [router]);
+
+  // Show QR Code
+  useEffect(() => {
+    let intervalId;
+
+    if (isFlipped) {
+      intervalId = setInterval(() => {
+        showQrCode();
+      }, 10000);
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isFlipped]);
 
   return (
     <>

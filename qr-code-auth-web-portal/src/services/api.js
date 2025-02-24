@@ -28,13 +28,11 @@ export const login = async (email, password) => {
 };
 
 // QR code
-export const getQRCode = async () => {
-  axios
-    .get(`${API_BASE_URL}/auth/qr-code-login`)
-    .then(function (response) {
-      return response?.data;
-    })
-    .catch(function (error) {
-      return error?.response;
-    });
+export const getQRCodeToken = async () => {
+  try {
+    let res = await axios.get(`${API_BASE_URL}/auth/qr-code-token`);
+    return res.data;
+  } catch (error) {
+    throw error.response;
+  }
 };

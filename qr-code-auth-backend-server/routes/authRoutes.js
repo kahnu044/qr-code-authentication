@@ -9,6 +9,6 @@ router.post("/register", userController.register);
 router.post("/login", userController.login);
 
 // QR Code Initiate endpoint
-router.post("/qr-code-login", userController.initiateQRCodeLogin);
+router.get("/qr-code-token", userController.initiateQRCodeLogin);
 
 module.exports = router;
