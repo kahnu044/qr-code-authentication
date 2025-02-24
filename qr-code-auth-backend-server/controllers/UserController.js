@@ -2,6 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const pusher = require("../config/pusher");
 
 const generateQRUniqueId = () => {
   const date = new Date();
@@ -100,5 +101,63 @@ exports.initiateQRCodeLogin = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+// Process the QR code form Mobile APP (Hit by a logged in user)
+exports.processQrCode = async (req, res) => {
+  const { qrCodeId, userId } = req.body;
+
+  if (!qrCodeId || !userId) {
+    return res
+      .status(400)
+      .json({ success: false, error: "qrCodeId and userId are required." });
+  }
+
+  try {
+    // Find the user by id
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Invalid credentials." });
+    }
+
+    if (user._id.toString() !== req.user.id) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Unauthorized access" });
+    }
+
+    // Generate a JWT
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user?.name },
+      process.env.JWT_PRIVATE_KEY,
+      { expiresIn: "5m" }
+    );
+
+    // send pusher event
+    const channelName = "private-" + qrCodeId;
+    pusher.trigger(channelName, "qr-code-login", {
+      message: "QR code has been processed successfully",
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          name: user.name,
+        },
+        token: token,
+      },
+    });
+
+    return res.json({
+      message: "QR code has been processed successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Internal server error." });
   }
 };
