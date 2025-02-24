@@ -4,56 +4,91 @@ import { useRouter } from "next/router";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [isFlipped, setIsFlipped] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (email && password) {
-    //   localStorage.setItem("email", email);
+    if (email && password) {
+      localStorage.setItem("email", email);
       router.push("/dashboard");
-    // }
+    }
+  };
+
+  const handleFlip = () => {
+    setIsFlipped(!isFlipped);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black-100">
-      <div className="w-[400px] bg-white flex flex-col items-center p-8 rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-black">Login</h2>
+      <div className="perspective-1000">
+        <div className={`relative w-[400px] h-[400px]`}>
 
-        <form onSubmit={handleSubmit}>
-          <label className="text-gray-600"> Email</label>
-          <input
-            type="text"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 p-2 rounded mb-4 w-full text-black"
-          />
-
-          <label className="text-gray-600"> Password</label>
-          <input
-            type="text"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 p-2 rounded mb-4 w-full text-black"
-          />
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white p-2 rounded"
+          {/* Login Form */}
+          <div
+            className={`absolute w-full h-full backface-hidden bg-white flex flex-col items-center p-8 rounded shadow-md ${
+              isFlipped ? "hidden" : "block"
+            }`}
           >
-            Login
-          </button>
-        </form>
+            <h2 className="text-2xl font-bold mb-4 text-black">Login</h2>
 
-        <span className="my-4 text-black"> OR </span>
+            <form onSubmit={handleSubmit} className="w-full">
+              <label className="text-gray-600">Email</label>
+              <input
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border border-gray-300 p-2 rounded mb-4 w-full text-black"
+              />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
-        >
-          Login with QR Code
-        </button>
+              <label className="text-gray-600">Password</label>
+              <input
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border border-gray-300 p-2 rounded mb-4 w-full text-black"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-green-600 text-white p-2 rounded"
+              >
+                Login
+              </button>
+            </form>
+
+            <span className="my-4 text-black">OR</span>
+
+            <button
+              type="button"
+              onClick={handleFlip}
+              className="w-full bg-blue-500 text-white p-2 rounded"
+            >
+              Login with QR Code
+            </button>
+          </div>
+
+          {/* QR Code */}
+          <div
+            className={`absolute w-full h-full backface-hidden bg-white flex flex-col items-center justify-center p-8 rounded shadow-md ${
+              isFlipped ? "block" : "hidden"
+            }`}
+          >
+            <h2 className="text-2xl font-bold mb-4 text-black">Scan QR Code</h2>
+            <div className="bg-gray-200 w-32 h-32 mb-4 flex items-center justify-center">
+              QR CODE
+            </div>
+            <button
+              onClick={handleFlip}
+              className="w-full bg-green-600 text-white p-2 rounded"
+            >
+              Back to Login
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );
