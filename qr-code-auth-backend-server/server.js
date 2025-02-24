@@ -2,8 +2,20 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const Pusher = require("pusher");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const app = express();
 const PORT = process.env.PORT || 5002;
+
+// Connect to MongoDB (adjust the connection string as needed)
+mongoose.connect('mongodb://localhost:27017/qr-auth', {});
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB');
+});
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
 
 //Pusher configuration
 const pusher = new Pusher({
