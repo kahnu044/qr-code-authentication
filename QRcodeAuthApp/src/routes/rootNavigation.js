@@ -1,6 +1,6 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SessionScreen from '../screens/SessionScreen';
@@ -13,21 +13,41 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Session" component={SessionScreen} />
-      <Tab.Screen name="Account" component={AccountScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Session"
+        component={SessionScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{headerShown: false}}
+      />
     </Tab.Navigator>
   );
 }
 
-export default function RootNavigation({ isLoggedIn }) {
+export default function RootNavigation({isLoggedIn}) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {!isLoggedIn ? (
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
         ) : (
-          <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Main"
+            component={TabNavigator}
+            options={{headerShown: false}}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
