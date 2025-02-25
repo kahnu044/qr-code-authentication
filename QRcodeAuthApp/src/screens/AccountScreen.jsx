@@ -1,14 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AccountScreen = () => {
   return (
-    <View>
-      <Text>AccountScreen</Text>
-    </View>
-  )
-}
+    <SafeAreaView style={{flex: 1, backgroundColor: 'gray'}}>
+      <View>
+        <Text>AccountScreen</Text>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-export default AccountScreen
+export default AccountScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

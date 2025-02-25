@@ -1,14 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SessionScreen = () => {
   return (
-    <View>
-      <Text>SessionScreen</Text>
-    </View>
-  )
-}
+    <SafeAreaView style={{flex: 1, backgroundColor: 'gray'}}>
+      <View>
+        <Text>SessionScreen</Text>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-export default SessionScreen
+export default SessionScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
