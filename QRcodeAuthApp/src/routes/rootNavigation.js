@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
-import SessionScreen from '../screens/SessionScreen';
+import ScanQrCodeScreen from '../screens/ScanQrCodeScreen';
 import AccountScreen from '../screens/AccountScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -56,8 +56,8 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Session"
-        component={SessionScreen}
+        name="ScanQRCode"
+        component={ScanQrCodeScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
