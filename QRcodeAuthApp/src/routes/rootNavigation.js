@@ -6,22 +6,53 @@ import HomeScreen from '../screens/HomeScreen';
 import SessionScreen from '../screens/SessionScreen';
 import AccountScreen from '../screens/AccountScreen';
 import Icon from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {View, Text} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Define Tab Navigation
 function TabNavigator() {
+
+  let tabPrimaryColor = '#366cf2';
+  let tabSecondaryColor = tabSecondaryColor;
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarStyle: {
+          height: 80,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          position: 'absolute',
+          backgroundColor: 'white',
+        },
+      })}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size, focused, tintColor}: any) => {
-            return <Icon name="home" color="#F3C81DFF" size={20} />;
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="home"
+              color={focused ? tabPrimaryColor : tabSecondaryColor}
+              size={20}
+            />
+          ),
+          tabBarLabelStyle: {
+            color: tabPrimaryColor,
           },
+          tabBarLabel: ({focused}) => (
+            <Text
+              style={{
+                color: focused ? tabPrimaryColor : tabSecondaryColor,
+                fontSize: 12,
+              }}>
+              Home
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -29,9 +60,24 @@ function TabNavigator() {
         component={SessionScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size, focused, tintColor}: any) => {
-            return <Icon name="info" color="#F3C81DFF" size={20} />;
-          },
+          tabBarLabel: '',
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                width: 70,
+                height: 70,
+                backgroundColor: '#366cf2',
+                borderRadius: 35,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <MaterialCommunityIcons
+                name="qrcode-scan"
+                size={35}
+                color="white"
+              />
+            </View>
+          ),
         }}
       />
       <Tab.Screen
@@ -39,9 +85,22 @@ function TabNavigator() {
         component={AccountScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size, focused, tintColor}: any) => {
-            return <Icon name="user" color="#F3C81DFF" size={20} />;
-          },
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="user"
+              color={focused ? tabPrimaryColor : tabSecondaryColor}
+              size={20}
+            />
+          ),
+          tabBarLabel: ({focused}) => (
+            <Text
+              style={{
+                color: focused ? tabPrimaryColor : tabSecondaryColor,
+                fontSize: 12,
+              }}>
+              Account
+            </Text>
+          ),
         }}
       />
     </Tab.Navigator>
