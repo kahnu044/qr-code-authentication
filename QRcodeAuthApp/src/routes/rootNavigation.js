@@ -16,15 +16,13 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
 
   let tabPrimaryColor = '#366cf2';
-  let tabSecondaryColor = tabSecondaryColor;
+  let tabSecondaryColor = 'gray';
 
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarStyle: {
           height: 80,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
           position: 'absolute',
           backgroundColor: 'white',
         },
