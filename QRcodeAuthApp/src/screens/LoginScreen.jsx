@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,21 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const handleLogin = () => {
+    console.log('email', email);
+    console.log('password', password);
     console.log('Login Button Press');
+    setLoading(!loading);
   };
 
   return (
@@ -25,12 +33,16 @@ const LoginScreen = () => {
         style={styles.input}
         placeholder="Email"
         placeholderTextColor="#888"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         placeholderTextColor="#888"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
 
       {/* <TouchableOpacity  activeOpacity={0.9}>
@@ -41,7 +53,13 @@ const LoginScreen = () => {
         activeOpacity={0.9}
         style={styles.button}
         onPress={handleLogin}>
-        <Text style={styles.buttonText}>Sign in</Text>
+        <Text style={styles.buttonText}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FFFFFF" />
+          ) : (
+            'Sign in'
+          )}
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -87,6 +105,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 55,
   },
   buttonText: {
     color: '#FFF',
