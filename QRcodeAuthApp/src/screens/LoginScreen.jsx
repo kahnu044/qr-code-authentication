@@ -11,12 +11,15 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {loginUser} from '../api/auth';
+import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation(); // Hook to access navigation
 
   // Alert function
   const alert = () => {};
@@ -28,6 +31,8 @@ const LoginScreen = () => {
       const data = await loginUser(email, password);
 
       console.log('success', data);
+      await AsyncStorage.setItem("authToken", data.token);
+      navigation.replace("Main");
     } catch (error) {
       Alert.alert('Error!', error?.error, [
         {
