@@ -8,20 +8,37 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {loginUser} from '../api/auth';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    console.log('email', email);
-    console.log('password', password);
-    console.log('Login Button Press');
-    setLoading(!loading);
+  // Alert function
+  const alert = () => {};
+
+  const handleLogin = async () => {
+    setLoading(true);
+
+    try {
+      const data = await loginUser(email, password);
+
+      console.log('success', data);
+    } catch (error) {
+      Alert.alert('Error!', error?.error, [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'OK',
+        },
+      ]);
+    }
+    setLoading(false);
   };
 
   return (
