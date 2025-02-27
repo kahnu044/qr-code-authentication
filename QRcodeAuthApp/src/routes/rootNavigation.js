@@ -116,11 +116,18 @@ export default function RootNavigation({isLoggedIn}) {
             options={{headerShown: false}}
           />
         ) : (
+          <>
           <Stack.Screen
             name="Main"
             component={TabNavigator}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{headerShown: false}}
+          />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
