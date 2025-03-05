@@ -7,14 +7,13 @@ import ScanQrCodeScreen from '../screens/ScanQrCodeScreen';
 import AccountScreen from '../screens/AccountScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Define Tab Navigation
 function TabNavigator() {
-
   let tabPrimaryColor = '#366cf2';
   let tabSecondaryColor = 'gray';
 
@@ -26,6 +25,9 @@ function TabNavigator() {
           position: 'absolute',
           backgroundColor: 'white',
         },
+        tabBarButton: props => (
+          <TouchableOpacity {...props} activeOpacity={1} />
+        ),
       })}>
       <Tab.Screen
         name="Home"
@@ -117,16 +119,16 @@ export default function RootNavigation({isLoggedIn}) {
           />
         ) : (
           <>
-          <Stack.Screen
-            name="Main"
-            component={TabNavigator}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{headerShown: false}}
-          />
+            <Stack.Screen
+              name="Main"
+              component={TabNavigator}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{headerShown: false}}
+            />
           </>
         )}
       </Stack.Navigator>
